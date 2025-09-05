@@ -1,7 +1,7 @@
 import axios from 'axios';
 const urlStr:string = `https://dummyjson.com/users`;
 
-enum gender {
+enum Gender {
   male = 'male',
   female = 'female'
 }
@@ -12,27 +12,32 @@ type User = {
   lastName: string,
   maidenName: string,
   age: number,
-  gender: gender
+  gender: Gender
 }
 
 async function getUsers():Promise<User[] | Error> {
-  const resp = await axios.get<User[]>(urlStr);
-  if (resp.status !== 200) {
-    throw new Error('Ошибка при получении данных');
-  }
-  return resp.data.map(user => {
-    if (!(user.gender in gender)) {
-      console.log(`Некорректное значение gender для пользователя ${user.id}: ${user.gender}`);
-    }
+  try {
+    const resp = await axios.get<{users: User[]}>(urlStr);
+      if (resp.status !== 200) {
+        throw new Error('Ошибка при получении данных');
+      }
 
-    return ({
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      maidenName: user.maidenName,
-      age: user.age,
-      gender: user.gender
-  })});
+    return resp.data.users.map(user => {
+      if (!(user.gender in Gender)) {
+        console.log(`Некорректное значение gender для пользователя ${user.id}: ${user.gender}`);
+      }
+
+      return ({
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        maidenName: user.maidenName,
+        age: user.age,
+        gender: user.gender
+    })});
+  } catch(e) {
+    return e;
+  }
 }
 
 getUsers()
