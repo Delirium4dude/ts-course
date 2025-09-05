@@ -38,18 +38,48 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var axios_1 = require("axios");
 var urlStr = "https://dummyjson.com/users";
+var Gender;
+(function (Gender) {
+    Gender["male"] = "male";
+    Gender["female"] = "female";
+})(Gender || (Gender = {}));
 function getUsers() {
     return __awaiter(this, void 0, void 0, function () {
-        var resp;
+        var resp, e_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, axios_1.default.get(urlStr)];
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, axios_1.default.get(urlStr)];
                 case 1:
                     resp = _a.sent();
-                    console.log(resp.data);
-                    return [2 /*return*/, resp.data];
+                    if (resp.status !== 200) {
+                        throw new Error('Ошибка при получении данных');
+                    }
+                    return [2 /*return*/, resp.data.users.map(function (user) {
+                            if (!(user.gender in Gender)) {
+                                console.log("\u041D\u0435\u043A\u043E\u0440\u0440\u0435\u043A\u0442\u043D\u043E\u0435 \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435 gender \u0434\u043B\u044F \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044F ".concat(user.id, ": ").concat(user.gender));
+                            }
+                            return ({
+                                id: user.id,
+                                firstName: user.firstName,
+                                lastName: user.lastName,
+                                maidenName: user.maidenName,
+                                age: user.age,
+                                gender: user.gender
+                            });
+                        })];
+                case 2:
+                    e_1 = _a.sent();
+                    return [2 /*return*/, e_1];
+                case 3: return [2 /*return*/];
             }
         });
     });
 }
-getUsers();
+getUsers()
+    .then(function (users) {
+    console.log(users);
+}).catch(function (err) {
+    console.error(err);
+});

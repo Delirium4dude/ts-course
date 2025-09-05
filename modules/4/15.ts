@@ -5,7 +5,7 @@ interface IPayment {
     to: number
 };
 
-enum PaymentStatus {
+enum PaymentStatuses {
     Success = "success",
     Failed = "failed",
 }
@@ -22,12 +22,12 @@ interface IDataFailed {
 }
 
 interface IResponseSucces {
-    status: PaymentStatus.Success;
+    status: PaymentStatuses.Success;
     data: IDataSuccess;
 }
 
 interface IResponseFailed {
-    status: PaymentStatus.Failed;
+    status: PaymentStatuses.Failed;
     data: IDataFailed;
 }
 
@@ -35,7 +35,7 @@ interface IResponseFailed {
 type response = IResponseFailed | IResponseSucces;
 
 function isResponseSuccess(response: response): response is IResponseSucces {
-  return response.status === PaymentStatus.Success
+  return response.status === PaymentStatuses.Success
 }
 
 function checkResponseStatus(res: response): number {
