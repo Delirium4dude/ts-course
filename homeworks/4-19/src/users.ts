@@ -12,7 +12,7 @@ type User = {
   lastName: string,
   maidenName: string,
   age: number,
-  gender: keyof typeof gender
+  gender: gender
 }
 
 async function getUsers():Promise<User[] | Error> {
@@ -20,14 +20,19 @@ async function getUsers():Promise<User[] | Error> {
   if (resp.status !== 200) {
     throw new Error('Ошибка при получении данных');
   }
-  return resp.data.map(user => ({
-    id: user.id,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    maidenName: user.maidenName,
-    age: user.age,
-    gender: user.gender
-  }));
+  return resp.data.map(user => {
+    if (!(user.gender in gender)) {
+      console.log(`Некорректное значение gender для пользователя ${user.id}: ${user.gender}`);
+    }
+
+    return ({
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      maidenName: user.maidenName,
+      age: user.age,
+      gender: user.gender
+  })});
 }
 
 getUsers()
