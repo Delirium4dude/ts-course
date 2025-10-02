@@ -67,7 +67,7 @@ namespace lesson_12 {
 
     addProduct(product:iProduct){ this.products.push(product) }
     deleteProduct(){}
-    getSum(){ return this.products.reduce((acc, val):number => acc + val.price, 0) }
+    getSum(){ return this.products.reduce((acc, val): number => acc + val.price, 0) }
     setDelivery(){}
     checkout(){}
   }
